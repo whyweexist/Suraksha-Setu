@@ -1,5 +1,5 @@
 pragma solidity ^0.8.0;
-//SPDX-License-Identifier: MPL-2.0
+
 
 contract Contract {
     address owner;
