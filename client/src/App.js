@@ -171,9 +171,9 @@ function App() {
           <div className="cwBottom">
             <div className="cwBottomLeft">
               <div className="cwBottomLeftInner">
-                <div className="cwBottomLeftHead">ResqAI</div>
+                <div className="cwBottomLeftHead">Suraksha Setu</div>
                 <div className="cwBottomLeftBody">
-                  ResqAI system lets callers talk to AI if there are no available emergancy helpline operators, grading them on the scale of how important their call is based on the keywords and recording their location. While the responses are being gathered, it will prioritize their call and hand over the call transcript to the emergancy handlers.
+                  Suraksha Setu system lets callers talk to AI if there are no available emergancy helpline operators, grading them on the scale of how important their call is based on the keywords and recording their location. While the responses are being gathered, it will prioritize their call and hand over the call transcript to the emergancy handlers.
                 </div>
                 <div className="cwBottomLeftBtn">
                   <button onClick={connectWallet} className="cwbtn">Connect Wallet</button>
