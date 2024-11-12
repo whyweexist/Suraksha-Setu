@@ -42,13 +42,13 @@ If the call is urgent, Suraksha Setu will immediately transfer the relevant info
 <br>
 
 ## Tech Stack
-### JavaScript
-### Python 
-###  CSS
-###  HTML 
-### Solidity
-### React
-### Tailwind
+#### JavaScript
+#### Python 
+#### CSS
+#### HTML 
+#### Solidity
+#### React
+#### Tailwind
 
 ## ▶️ Installation and Usage
 To use Sraksha Setu, simply integrate the system with your emergency services call center. The system can be easily customized to meet the specific needs of your organization. Suraksha Setu is compatible with most modern phone systems and can be configured to work with any existing emergency call management software.
