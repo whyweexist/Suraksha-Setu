@@ -1,7 +1,7 @@
 from web3 import Web3
 
 
-provider = Web3.HTTPProvider('https://eth-sepolia.g.alchemy.com/v11/K22BWUGCWQVDIJYJV5IAJTK3FWWFNKFST4')
+provider = Web3.HTTPProvider('https://eth-mainnet.g.alchemy.com/v2/YogYSRTuEzECe1pGYL03w3SCX3ji2Yfc')
 w3 = Web3(provider)
 
 
