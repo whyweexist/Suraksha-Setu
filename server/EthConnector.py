@@ -1,12 +1,12 @@
 from web3 import Web3
-from env import getPrivateKey
 
-provider = Web3.HTTPProvider('https://eth-sepolia.g.alchemy.com/v2/zDdlaNQNTz6PrbF8nXtdvbM6BEt2aMFW')
+
+provider = Web3.HTTPProvider('https://eth-sepolia.g.alchemy.com/v11/K22BWUGCWQVDIJYJV5IAJTK3FWWFNKFST4')
 w3 = Web3(provider)
 
-contract_address = Web3.toChecksumAddress("0x4d6B6Df0BD2CF0E96A74746399F35bA818cBbeC4")
 
-contract_abi =[
+contract_address = Web3.to_checksum_address("0x4d6B6Df0BD2CF0E96A74746399F35bA818cBbeC4")
+contract_abi = [
     {
       "inputs": [],
       "stateMutability": "nonpayable",
@@ -104,64 +104,77 @@ contract_abi =[
       "stateMutability": "nonpayable",
       "type": "function"
     }
-  ]
+]
+
 
 contract = w3.eth.contract(address=contract_address, abi=contract_abi)
-sender_address = Web3.toChecksumAddress("0x883d473C3b136315e9e491E5D1Ab9f4EaC667F0e")
+
+
+sender_address = Web3.to_checksum_address("0x883d473C3b136315e9e491E5D1Ab9f4EaC667F0e")
+private_key = "e78950d8e70f36a4c5c8fdda2ccb240fdaef719b7d1062880df38c664acd48d0"  # Replace with secure method
+
+
 w3.eth.defaultAccount = sender_address
-nonce = w3.eth.getTransactionCount(sender_address)
-data = contract.functions.getOperations().buildTransaction({
-    'gas': 100000,
-    'gasPrice': w3.toWei('20', 'gwei'),
-    'nonce': nonce,
-})
-signed_txn = w3.eth.account.sign_transaction(data, private_key=getPrivateKey())
-tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+
+def send_transaction(function, *args):
+    try:
+        
+        nonce = w3.eth.get_transaction_count(sender_address)
+        transaction = function(*args).buildTransaction({
+            'gas': 2000000,
+            'gasPrice': w3.toWei('50', 'gwei'),
+            'nonce': nonce,
+        })
+
+        
+        signed_txn = w3.eth.account.sign_transaction(transaction, private_key=private_key)
+
+        
+        tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+
+       
+        tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+        print(f"Transaction Hash: {tx_hash.hex()}")
+        print(f"Transaction Receipt: {tx_receipt}")
+        return tx_receipt
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
+
+
+
+def get_operations():
+    try:
+        operations = contract.functions.getOperations().call()
+        print("Operations List:")
+        for op in operations:
+            print(f"ID: {op[0]}, Data: {op[1]}, Status: {op[2]}")
+        return operations
+    except Exception as e:
+        print(f"Error fetching operations: {e}")
+        return None
+
 
 print(" ===================== MallEZ Admin Terminal ========================")
 while True:
-   print("Available Commands:")
-   print("1 => addToWhiteList(address) : Adds address to whiteList, Requires Address ")
-   print("2 => removeFromWhiteList(address) : Removes address from whiteList, Requires Address ")
-   
-   x = int(input("Enter your choice (integer 1-8) : "))
-   if (x == 1):
-      s = input("Enter Address : ");
-      try: 
-         transaction = contract.functions.addToWhitelist(s).buildTransaction({
-             'gas': 2000000,
-             'gasPrice': w3.toWei('50', 'gwei'),
-             'nonce': w3.eth.getTransactionCount(sender_address),
-         })
+    print("Available Commands:")
+    print("1 => addToWhiteList(address) : Adds address to whiteList, Requires Address ")
+    print("2 => removeFromWhiteList(address) : Removes address from whiteList, Requires Address ")
 
-         # Sign and send the transaction
-         signed_txn = w3.eth.account.signTransaction(transaction, private_key=getPrivateKey())
-         tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-
-         print(tx_hash)
-         print("Transaction Completed Successfully.")
-         print("\n")
-      except:
-         print("Transaction Failed!")
-         print("\n")
-
-   elif (x == 2):
-      s = input("Enter Address : ")
-      try: 
-         transaction = contract.functions.removeFromWhitelist(s).buildTransaction({
-             'gas': 2000000,
-             'gasPrice': w3.toWei('50', 'gwei'),
-             'nonce': w3.eth.getTransactionCount(sender_address),
-         })
-
-         # Sign and send the transaction
-         signed_txn = w3.eth.account.signTransaction(transaction, private_key=getPrivateKey())
-         tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-
-         print(tx_hash)
-         print("Transaction Completed Successfully.")
-         print("\n")
-      except:
-         print("Transaction Failed!")
-         print("\n")
+    try:
+        x = int(input("Enter your choice (integer 1-8) : "))
+        if x == 1:
+            s = input("Enter Address to add to whitelist: ")
+            send_transaction(contract.functions.addToWhitelist, Web3.to_checksum_address(s))
+        elif x == 2:
+            s = input("Enter Address to remove from whitelist: ")
+            send_transaction(contract.functions.removeFromWhitelist, Web3.to_checksum_address(s))
+        else:
+            print("Invalid choice! Please select 1 or 2.")
+    except ValueError:
+        print("Invalid input! Please enter a valid integer.")
+    except KeyboardInterrupt:
+        print("\nExiting the admin terminal...")
+        break
