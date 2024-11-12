@@ -43,7 +43,7 @@ If the call is urgent, Suraksha Setu will immediately transfer the relevant info
 
 ## Tech Stack
 #### JavaScript
-#### Python 
+#### Python (Web3,OpenAI,Twilio,GPTLibary and Request and time)
 #### CSS
 #### HTML 
 #### Solidity
